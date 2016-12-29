@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="CertificatesManager.Tabs.StorageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:properties="clr-namespace:CertificatesManager.Properties"
+             xmlns:wpfApi="clr-namespace:CertificatesManager.WpfApi"
+             mc:Ignorable="d"
+             d:DesignHeight="360" d:DesignWidth="360">
+
+    <UserControl.Resources>
+        <wpfApi:AddColonConverter x:Key="AddColonConverter" />
+    </UserControl.Resources>
+
+    <StackPanel Margin="8">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="0" Content="{Binding Source={x:Static properties:Resources.lblStoreName}, Converter={StaticResource AddColonConverter}}" />
+            <ComboBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding StoreNames, Mode=OneWay}" SelectedItem="{Binding SelectedStore, Mode=TwoWay}" />
+
+            <Label Grid.Column="2" Grid.Row="0" Content="{Binding Source={x:Static properties:Resources.lblStoreLocation}, Converter={StaticResource AddColonConverter}}" />
+            <ComboBox Grid.Column="2" Grid.Row="1" ItemsSource="{Binding StoreLocations, Mode=OneWay}" SelectedItem="{Binding SelectedLocation, Mode=TwoWay}" />
+        </Grid>
+
+        <ListView Margin="0,4,0,4" Height="232" ItemsSource="{Binding Certificates, Mode=OneWay}" SelectedItem="{Binding SelectedCertificate, Mode=OneWayToSource}" SelectionMode="Single">
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Width="240" Header="{x:Static properties:Resources.lblCertificate}" DisplayMemberBinding="{Binding Subject}" />
+                        <GridViewColumn Width="86" Header="{x:Static properties:Resources.lblValidFrom}" DisplayMemberBinding="{Binding NotBefore, StringFormat=d}" />
+                        <GridViewColumn Width="86" Header="{x:Static properties:Resources.lblValidTo}" DisplayMemberBinding="{Binding NotAfter, StringFormat=d}" />
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Label Content="{Binding Source={x:Static properties:Resources.lblThumbprint}, Converter={StaticResource AddColonConverter}}" />
+        <TextBox MinHeight="20" IsReadOnly="True" Text="{Binding Thumbprint, Mode=OneWay}" />
+    </StackPanel>
+</UserControl>
